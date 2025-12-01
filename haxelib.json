@@ -1,0 +1,9 @@
+{
+  "name": "fatal_labyrinth_clone",
+  "license": "MIT",
+  "version": "0.0.1",
+  "dependencies": {
+    "heaps": "",
+    "hlsdl": ""
+  }
+}
