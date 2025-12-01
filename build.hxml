@@ -1,7 +1,6 @@
 -cp src
 -lib heaps
 -lib hlsdl
--hl bin/main.hl
 -main Main
--D windowSize=800x600
--D windowTitle=Fatal Labyrinth Clone
+-hl bin/main.hl
+-D windowSize=1280x720
