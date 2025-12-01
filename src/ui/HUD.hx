@@ -1,28 +1,20 @@
-package ui;
-
-import h2d.Flow;
+import h2d.Object;
 import h2d.Text;
 import hxd.res.DefaultFont;
+import Game;
 
-class HUD extends Flow {
-    
-    var scoreText : Text;
+class HUD extends Object {
+    var tf : Text;
 
-    public function new(parent:h2d.Object) {
-        super(parent);
-        
-        // Fix: Flow uses horizontalSpacing/verticalSpacing instead of 'spacing'
-        horizontalSpacing = 10;
-        verticalSpacing = 10;
-        layout = Horizontal;
-        padding = 10;
-        
+    public function new() {
+        super(Game.inst.s2d);
         var font = DefaultFont.get();
-        scoreText = new Text(font, this);
-        scoreText.text = "Score: 0";
+        tf = new Text(font, this);
+        tf.text = "Score: 0";
+        tf.setPosition(10, 10);
     }
 
-    public function updateScore(score:Int) {
-        scoreText.text = "Score: " + score;
+    public function destroy() {
+        remove();
     }
 }
