@@ -1,61 +1,45 @@
 package;
 
+import h2d.Graphics;
 import h2d.Object;
-import h2d.Bitmap;
-import h2d.Tile;
 
 class Entity extends Object {
-    public var cx : Int;
-    public var cy : Int;
-    var bmp : Bitmap;
-    var game : Game;
+    
+    var gfx:Graphics;
+    var color:Int;
+    var time:Float = 0;
 
-    public function new(game:Game, x:Int, y:Int, color:Int, parent:Object) {
+    public function new(x:Float, y:Float, color:Int, parent:Object) {
         super(parent);
-        this.game = game;
-        this.cx = x;
-        this.cy = y;
-
-        var tile = Tile.fromColor(color, Const.TILE_SIZE, Const.TILE_SIZE);
-        bmp = new Bitmap(tile, this);
+        this.x = x;
+        this.y = y;
+        this.color = color;
         
-        // Center the sprite visually relative to grid
-        updatePos();
+        drawGraphics();
     }
 
-    public function updatePos() {
-        this.x = cx * Const.TILE_SIZE;
-        this.y = cy * Const.TILE_SIZE;
-    }
-
-    public function tryMove(dx:Int, dy:Int) : Bool {
-        var tx = cx + dx;
-        var ty = cy + dy;
-
-        if (!game.level.isWalkable(tx, ty)) return false;
+    function drawGraphics() {
+        gfx = new Graphics(this);
         
-        // Check for other entities
-        for (e in game.enemies) {
-            if (e.cx == tx && e.cy == ty) {
-                attack(e);
-                return true;
-            }
-        }
+        // Improve graphics: Gradient-like look using concentric circles
+        gfx.beginFill(color, 1.0);
+        gfx.drawCircle(0, 0, 16);
+        gfx.endFill();
 
-        if (game.player != null && game.player.cx == tx && game.player.cy == ty && this != game.player) {
-            attack(game.player);
-            return true;
-        }
-
-        cx = tx;
-        cy = ty;
-        updatePos();
-        return true;
+        // Highlight
+        gfx.beginFill(0xFFFFFF, 0.3);
+        gfx.drawCircle(-4, -4, 6);
+        gfx.endFill();
+        
+        // Border
+        gfx.lineStyle(2, 0xFFFFFF, 0.8);
+        gfx.drawCircle(0, 0, 16);
     }
 
-    public function attack(target:Entity) {
-        // Simple attack animation/logic placeholder
-        target.bmp.alpha = 0.5;
-        haxe.Timer.delay(function() { if(target != null && target.bmp != null) target.bmp.alpha = 1; }, 200);
+    public function update(dt:Float) {
+        time += dt;
+        // Idle animation: gentle floating/breathing
+        gfx.scaleX = 1 + Math.sin(time * 5) * 0.05;
+        gfx.scaleY = 1 + Math.cos(time * 5) * 0.05;
     }
 }
