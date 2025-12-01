@@ -2,24 +2,27 @@ package ui;
 
 import h2d.Flow;
 import h2d.Text;
+import hxd.res.DefaultFont;
 
 class HUD extends Flow {
-    var debugText : Text;
+    
+    var scoreText : Text;
 
     public function new(parent:h2d.Object) {
         super(parent);
-        // Fixed: Flow does not have 'spacing' field, use horizontalSpacing/verticalSpacing
+        
+        // Fix: Flow uses horizontalSpacing/verticalSpacing instead of 'spacing'
         horizontalSpacing = 10;
         verticalSpacing = 10;
+        layout = Horizontal;
         padding = 10;
-        layout = Vertical;
-
-        var font = hxd.res.DefaultFont.get();
-        debugText = new Text(font, this);
-        debugText.text = "HUD";
+        
+        var font = DefaultFont.get();
+        scoreText = new Text(font, this);
+        scoreText.text = "Score: 0";
     }
 
-    public function update(dt:Float) {
-        // HUD update logic
+    public function updateScore(score:Int) {
+        scoreText.text = "Score: " + score;
     }
 }
