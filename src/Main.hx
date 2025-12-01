@@ -1,12 +1,12 @@
 import hxd.App;
-import ui.MainMenu;
 
 class Main extends App {
-	override function init() {
-		setScene(new MainMenu());
-	}
+    override function init() {
+        // hxd.Res.initEmbed(); // Disabled to avoid missing asset errors
+        new Game(s2d);
+    }
 
-	static function main() {
-		new Main();
-	}
+    static function main() {
+        new Main();
+    }
 }
