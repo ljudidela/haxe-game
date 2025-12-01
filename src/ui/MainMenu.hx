@@ -1,54 +1,59 @@
 package ui;
 
-import h2d.Scene;
-import h2d.Text;
-import h2d.Interactive;
 import h2d.Flow;
-import hxd.res.DefaultFont;
+import h2d.Text;
+import hxd.Res;
+import Const;
 
-class MainMenu extends Scene {
-    
-    public function new() {
-        super();
-        
-        var flow = new Flow(this);
-        flow.layout = Vertical;
-        flow.verticalSpacing = 20;
-        flow.fillWidth = true;
-        flow.fillHeight = true;
-        flow.horizontalAlign = Middle;
-        flow.verticalAlign = Middle;
+class MainMenu extends h2d.Scene {
 
-        var title = new Text(DefaultFont.get(), flow);
-        title.text = "MY AWESOME GAME";
-        title.scale(4);
-        title.textColor = Const.UI_ACCENT_COLOR;
-        // Simple shadow effect
-        title.dropShadow = { dx : 2, dy : 2, color : 0x000000, alpha : 0.8 };
+	public function new() {
+		super();
+		init();
+	}
 
-        addButton(flow, "START GAME", function() {
-            Main.inst.startGame();
-        });
+	function init() {
+		var flow = new Flow(this);
+		flow.layout = Vertical;
+		flow.verticalSpacing = 20;
+		flow.fillWidth = true;
+		flow.fillHeight = true;
+		flow.horizontalAlign = Middle;
+		flow.verticalAlign = Middle;
 
-        addButton(flow, "SETTINGS", function() {
-            trace("Settings clicked");
-        });
+		var title = new Text(hxd.res.DefaultFont.get(), flow);
+		title.text = "GAME TITLE";
+		title.textColor = Const.UI_ACCENT_COLOR;
+		title.scale(2);
 
-        addButton(flow, "EXIT", function() {
-            hxd.System.exit();
-        });
-    }
+		addBtn(flow, "START", function() {
+			trace("Start Game");
+		});
 
-    function addButton(parent:Flow, label:String, onClick:Void->Void) {
-        var bg = new h2d.Object(parent);
-        
-        var txt = new Text(DefaultFont.get(), bg);
-        txt.text = label;
-        txt.scale(2);
-        
-        var interact = new Interactive(txt.textWidth * 2, txt.textHeight * 2, bg);
-        interact.onOver = function(_) txt.textColor = Const.UI_ACCENT_COLOR;
-        interact.onOut = function(_) txt.textColor = Const.UI_TEXT_COLOR;
-        interact.onClick = function(_) onClick();
-    }
+		addBtn(flow, "EXIT", function() {
+			hxd.System.exit();
+		});
+	}
+
+	function addBtn(parent:Flow, label:String, onClick:Void->Void) {
+		var btn = new Flow(parent);
+		btn.padding = 10;
+		btn.backgroundTile = h2d.Tile.fromColor(0x333333, 200, 50);
+		
+		var tf = new Text(hxd.res.DefaultFont.get(), btn);
+		tf.text = label;
+		tf.textColor = Const.UI_TEXT_COLOR;
+		
+		// Interactive wrapper
+		var interact = new h2d.Interactive(200, 50, btn);
+		interact.onClick = function(_) onClick();
+		// Ensure interactive matches flow size/position if needed, 
+		// but putting it inside flow works if size is explicit or calculated.
+		// For flow, cleaner to make the flow itself interactive-aware or wrap.
+		// Here we just overlay.
+		btn.getProperties(btn).minWidth = 200;
+		btn.getProperties(btn).minHeight = 50;
+		btn.getProperties(btn).horizontalAlign = Middle;
+		btn.getProperties(btn).verticalAlign = Middle;
+	}
 }
