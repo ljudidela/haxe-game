@@ -1,28 +1,29 @@
 import h2d.Scene;
+import ui.MainMenu;
 import ui.HUD;
 
-class Game extends Scene {
-    
-    var level : Level;
-    var hud : HUD;
+class Game {
+    public static var inst : Game;
+    public var s2d : Scene;
+    public var level : Level;
+    public var hud : HUD;
+    public var menu : MainMenu;
 
-    public function new() {
-        super();
-        init();
+    public function new(s2d:Scene) {
+        inst = this;
+        this.s2d = s2d;
+        startMenu();
     }
 
-    function init() {
-        // Fix: Use 'this' instead of 's2d' when extending Scene
-        level = new Level(this);
-        hud = new HUD(this);
+    public function startMenu() {
+        if(level != null) level.destroy();
+        if(hud != null) hud.destroy();
+        menu = new MainMenu();
     }
 
-    // Fix: Removed 'override' as h2d.Scene does not have an update method
-    public function update(dt:Float) {
-        // Update logic here
-    }
-
-    override function onRemove() {
-        super.onRemove();
+    public function startGame() {
+        if(menu != null) menu.destroy();
+        level = new Level();
+        hud = new HUD();
     }
 }
