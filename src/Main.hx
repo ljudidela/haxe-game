@@ -1,28 +1,21 @@
 package;
 
-class Main extends hxd.App {
-    var game : Game;
+import hxd.App;
+
+class Main extends App {
+    
+    public static var inst:Main;
 
     override function init() {
-        // Basic Setup
-        engine.backgroundColor = 0x000000;
+        inst = this;
+        s2d.scaleMode = ScaleMode.LetterBox(Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT);
         
-        // Add some UI text
-        var font = hxd.res.DefaultFont.get();
-        var tf = new h2d.Text(font, s2d);
-        tf.text = "Fatal Labyrinth Clone - Arrows to Move, Space to Wait";
-        tf.textColor = 0xFFFFFF;
-        tf.y = 5;
-        tf.x = 5;
-
-        // Start Game Scene
-        var gameContainer = new h2d.Object(s2d);
-        gameContainer.y = 30; // Offset for UI
-        game = new Game(gameContainer);
+        // Start with Menu
+        setScene(new ui.MainMenu());
     }
 
-    override function update(dt:Float) {
-        if (game != null) game.update(dt);
+    public function startGame() {
+        setScene(new Game());
     }
 
     static function main() {
